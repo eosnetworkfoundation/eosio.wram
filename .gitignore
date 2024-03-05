@@ -1,3 +1,9 @@
+*.abi
+*.wasm
+!/include/**/*.abi
+!/include/**/*.wasm
+node_modules
+
 # Prerequisites
 *.d
 

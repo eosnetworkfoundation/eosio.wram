@@ -1,0 +1,16 @@
+{
+    "type": "module",
+    "scripts": {
+        "build": "cdt-cpp eosio.wram.cpp -I ./include",
+        "test": "bun test"
+    },
+    "dependencies": {
+        "@proton/vert": "^0.3.24",
+        "@wharfkit/antelope": "^1.0.7",
+        "@wharfkit/contract": "^1.1.5"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "typescript": "^5.3.3"
+    }
+}
