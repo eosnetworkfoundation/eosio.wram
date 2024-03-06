@@ -2,22 +2,20 @@
 
 The `eosio.wram` contract is a contract that allows to wrap & unwrap system RAM at 1:1 using the `ramtransfer` method.
 
-## Symbol & Contract
+## Token Contract
 
-- symbol: `0,RAM`
-- contract: `eosio.wram` & `eosio.token`
-- name: `Wrapped RAM`
+- Uses existing `eosio.token` contract
+- Uses native system contract `0,RAM` symbol.
+
+## RAM Wrapper Contract
+
+- Deployed under `eosio.wram` contract with `eosio@owner` permissions.
 
 ## Actions
 
 ## `wrap` & `unwrap`
 - **Wrap:** Send system RAM `bytes` to contract to issue `RAM` tokens to sender.
 - **Unwrap:** Send `RAM` tokens to receive system RAM `bytes` tokens and retire the tokens.
-
-## Token Format
-
-- Uses `eosio.token` system smart contract
-- Uses native system contract `0,RAM` symbol.
 
 ## Build
 
