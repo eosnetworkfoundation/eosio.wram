@@ -6,16 +6,16 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
       - name: Install CDT
         run: |
             curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.ACCESS_TOKEN }}" -L -o cdt.zip https://api.github.com/repos/AntelopeIO/cdt/actions/artifacts/1173981216/zip
             sudo apt install unzip
             unzip cdt.zip
             sudo apt install ./cdt_4.0.1-1_amd64.deb
-      - uses: actions/checkout@v3
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
       - run: bun install
       - run: bun run build
       - run: bun run test
