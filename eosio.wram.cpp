@@ -35,23 +35,21 @@ void wram::on_logbuyram( const name& payer, const name& receiver, const asset& q
 {
    // ignore buy ram not sent to this contract
    if (receiver != get_self()) { return; }
-   check(get_first_receiver() == "eosio"_n, "Only the eosio contract may buy RAM bytes to this contract.");
    wrap_ram(payer, bytes);
 }
 
 // @user
 [[eosio::on_notify("eosio::ramtransfer")]]
-void wram::on_ramtransfer(const name from, const name to, const int64_t bytes, const string memo)
+void wram::on_ramtransfer( const name from, const name to, const int64_t bytes, const string memo )
 {
    // ignore transfers not sent to this contract
    if (to != get_self()) { return; }
-   check(get_first_receiver() == "eosio"_n, "Only the eosio contract may send RAM bytes to this contract.");
    wrap_ram(from, bytes);
 }
 
 // @user
 [[eosio::on_notify("*::transfer")]]
-void wram::on_transfer(const name from, const name to, const asset quantity, const string memo)
+void wram::on_transfer( const name from, const name to, const asset quantity, const string memo )
 {
    // ignore transfers not sent to this contract
    if (to != get_self()) { return; }
@@ -59,6 +57,12 @@ void wram::on_transfer(const name from, const name to, const asset quantity, con
    // validate incoming token transfer
    check(get_first_receiver() == get_self(), "Only the " + get_self().to_string() + " contract may send tokens to this contract.");
    check(quantity.symbol == eosiosystem::system_contract::ram_symbol, "Only the system " + eosiosystem::system_contract::ram_symbol.code().to_string() + " token is accepted for transfers.");
+}
+
+void wram::block_receiver( const name receiver )
+{
+   if ( receiver == get_self() ) { return; } // ignore self transfer (eosio.wram)
+   check( receiver.prefix() != "eosio"_n, "cannot transfer to eosio.* accounts" );
 }
 
 } /// namespace eosio

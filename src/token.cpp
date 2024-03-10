@@ -99,9 +99,10 @@ void wram::transfer( const name&    from,
 
     // user sends RAM token to contract
     // unwraps RAM, retires RAM token, and transfers RAM bytes to user
-    if ( to == get_self() ) {
-      unwrap_ram( from, quantity );
-    }
+    if ( to == get_self() ) unwrap_ram( from, quantity );
+
+    // block accidental transfers to eosio.* accounts
+    block_receiver( to );
 }
 
 void wram::sub_balance( const name& owner, const asset& value ) {

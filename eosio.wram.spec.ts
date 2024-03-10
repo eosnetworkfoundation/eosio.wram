@@ -7,7 +7,8 @@ const blockchain = new Blockchain()
 const alice = 'alice'
 const bob = 'bob'
 const charles = 'charles'
-blockchain.createAccounts(bob, alice, charles)
+const system_accounts = ["eosio", "eosio.ram", "eosio.stake", "eosio.wrap", "eosio.token"]
+blockchain.createAccounts(bob, alice, charles, ...system_accounts)
 
 const wram_contract = 'eosio.wram'
 const contracts = {
@@ -196,6 +197,46 @@ describe(wram_contract, () => {
         expect(after.alice.RAM - before.alice.RAM).toBe(-500)
         expect(after.wram_contract.RAM - before.wram_contract.RAM).toBe(0)
         expect(after.wram_contract.supply - before.wram_contract.supply).toBe(-500)
+    })
+
+    test('transfer - RAM to another account', async () => {
+        const before = {
+            bob: {
+                bytes: getRamBytes(bob),
+                RAM: getTokenBalance(bob, "RAM"),
+            },
+            alice: {
+                bytes: getRamBytes(alice),
+                RAM: getTokenBalance(alice, "RAM"),
+            },
+        }
+        await contracts.wram.actions.transfer([alice, bob, "500 RAM", '']).send(alice)
+        const after = {
+            bob: {
+                bytes: getRamBytes(bob),
+                RAM: getTokenBalance(bob, "RAM"),
+            },
+            alice: {
+                bytes: getRamBytes(alice),
+                RAM: getTokenBalance(alice, "RAM"),
+            },
+        }
+
+        // bytes (no change)
+        expect(after.alice.bytes - before.alice.bytes).toBe(0)
+        expect(after.bob.bytes - before.bob.bytes).toBe(0)
+
+        // RAM
+        expect(after.alice.RAM - before.alice.RAM).toBe(-500)
+        expect(after.bob.RAM - before.bob.RAM).toBe(+500)
+    })
+
+    test('transfer::error - cannot transfer to eosio.* accounts', async () => {
+
+        for ( const to of system_accounts) {
+            const action = contracts.wram.actions.transfer([alice, to, "1000 RAM", '']).send(alice)
+            await expectToThrow(action, 'eosio_assert: cannot transfer to eosio.* accounts')
+        }
     })
 
     test('transfer::error - fake eosio.token RAM', async () => {

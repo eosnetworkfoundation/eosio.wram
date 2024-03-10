@@ -145,6 +145,7 @@ namespace eosio {
 
          void unwrap_ram( const name to, const asset quantity );
          void wrap_ram( const name to, const int64_t bytes );
+         void block_receiver( const name receiver );
 
          void sub_balance( const name& owner, const asset& value );
          void add_balance( const name& owner, const asset& value, const name& ram_payer );
