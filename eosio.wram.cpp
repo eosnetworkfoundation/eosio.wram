@@ -5,7 +5,7 @@ namespace eosio {
 
 void wram::unwrap_ram( const name to, const asset quantity )
 {
-   check( quantity.amount > 0, "quantity must be positive" );
+   check( quantity.amount > 0, "quantity must be positive" ); // shouldn't be possible
 
    // burn RAM tokens
    eosio::token::retire_action retire_act{get_self(), {get_self(), "active"_n}};
@@ -18,7 +18,7 @@ void wram::unwrap_ram( const name to, const asset quantity )
 
 void wram::wrap_ram( const name to, const int64_t bytes )
 {
-   check( bytes > 0, "bytes must be positive" );
+   check( bytes > 0, "bytes must be positive" ); // shouldn't be possible
 
    // issue RAM tokens
    const asset quantity{bytes, eosiosystem::system_contract::ram_symbol};
@@ -44,6 +44,7 @@ void wram::on_ramtransfer( const name from, const name to, const int64_t bytes, 
 {
    // ignore transfers not sent to this contract
    if (to != get_self()) { return; }
+   if ( memo == "ignore") { return; } // allow for internal RAM transfers
    wrap_ram(from, bytes);
 }
 

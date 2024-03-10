@@ -231,8 +231,14 @@ describe(wram_contract, () => {
         expect(after.bob.RAM - before.bob.RAM).toBe(+500)
     })
 
-    test('transfer::error - cannot transfer to eosio.* accounts', async () => {
+    test('transfer - ignore', async () => {
+        const before = getTokenBalance(alice, "RAM");
+        await contracts.system.actions.ramtransfer([alice, wram_contract, 1000, "ignore"]).send(alice)
+        const after = getTokenBalance(alice, "RAM")
+        expect(after - before).toBe(0)
+    })
 
+    test('transfer::error - cannot transfer to eosio.* accounts', async () => {
         for ( const to of system_accounts) {
             const action = contracts.wram.actions.transfer([alice, to, "1000 RAM", '']).send(alice)
             await expectToThrow(action, 'eosio_assert: cannot transfer to eosio.* accounts')
