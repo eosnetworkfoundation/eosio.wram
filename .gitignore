@@ -3,6 +3,7 @@
 !/include/**/*.abi
 !/include/**/*.wasm
 node_modules
+.DS_Store
 
 # Prerequisites
 *.d

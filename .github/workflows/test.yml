@@ -12,11 +12,8 @@ jobs:
           bun-version: latest
       - name: Install CDT
         run: |
-            curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.ACCESS_TOKEN }}" -L -o cdt.zip https://api.github.com/repos/AntelopeIO/cdt/actions/artifacts/1173981216/zip
-            sudo apt install unzip
-            unzip cdt.zip
+            curl https://gateway.pinata.cloud/ipfs/QmfFhXmbaZMgwVs51MHcUemG1A2XCNSTByRcAEG7S6iXaD -o cdt_4.0.1-1_amd64.deb
             sudo apt install ./cdt_4.0.1-1_amd64.deb
       - run: bun install
       - run: bun run build
       - run: bun run test
-

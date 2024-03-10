@@ -81,7 +81,7 @@ The token manager agrees to remove {{quantity}} from circulation, taken from the
 spec_version: "0.2.0"
 title: Transfer Tokens
 summary: 'Send {{nowrap quantity}} from {{nowrap from}} to {{nowrap to}}'
-icon: @ICON_BASE_URL@/@TRANSFER_ICON_URI@
+icon: https://gateway.pinata.cloud/ipfs/QmZ4HSZDuSrZ4BHawtZRhVfwyYJ4DepNJqVDzxY59KveiM#3830f1ce8cb07f7757dbcf383b1ec1b11914ac34a1f9d8b065f07600fa9dac19
 ---
 
 {{from}} agrees to send {{quantity}} to {{to}}.
