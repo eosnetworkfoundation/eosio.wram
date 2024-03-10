@@ -77,6 +77,32 @@
             "fields": []
         },
         {
+            "name": "logbuyram",
+            "base": "",
+            "fields": [
+                {
+                    "name": "payer",
+                    "type": "name"
+                },
+                {
+                    "name": "receiver",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "bytes",
+                    "type": "int64"
+                },
+                {
+                    "name": "ram_bytes",
+                    "type": "int64"
+                }
+            ]
+        },
+        {
             "name": "ramtransfer",
             "base": "",
             "fields": [
@@ -149,6 +175,11 @@
         {
             "name": "init",
             "type": "init",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "logbuyram",
+            "type": "logbuyram",
             "ricardian_contract": ""
         },
         {

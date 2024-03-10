@@ -27,6 +27,10 @@ public:
     {
         const int64_t bytes = bytes_cost_with_fee(quant);
         add_ram(receiver, bytes);
+
+        // log buy ram action
+        system_contract::logbuyram_action logbuyram_act{get_self(), {get_self(), "active"_n}};
+        logbuyram_act.send(payer, receiver, asset{0, ramcore_symbol}, bytes, 0);
     }
 
     /**
@@ -41,6 +45,10 @@ public:
     void buyrambytes( const name& payer, const name& receiver, uint32_t bytes )
     {
         add_ram(receiver, bytes);
+
+        // log buy ram action
+        system_contract::logbuyram_action logbuyram_act{get_self(), {get_self(), "active"_n}};
+        logbuyram_act.send(payer, receiver, asset{0, ramcore_symbol}, bytes, 0);
     }
 
     /**
@@ -71,6 +79,23 @@ public:
         add_ram(to, bytes);
     }
 
+    /**
+     * Logging for buyram & buyrambytes action
+     *
+     * @param payer - the ram buyer,
+     * @param receiver - the ram receiver,
+     * @param quantity - the quantity of tokens to buy ram with.
+     * @param bytes - the quantity of ram to buy specified in bytes.
+     * @param ram_bytes - the ram bytes held by receiver after the action.
+     */
+    [[eosio::action]]
+    void logbuyram( const name& payer, const name& receiver, const asset& quantity, int64_t bytes, int64_t ram_bytes )
+    {
+        require_auth(get_self());
+        require_recipient( receiver );
+    }
+
+
     [[eosio::action]]
     void init()
     {
@@ -94,6 +119,7 @@ public:
     using buyrambytes_action = eosio::action_wrapper<"buyrambytes"_n, &system_contract::buyrambytes>;
     using buyram_action = eosio::action_wrapper<"buyram"_n, &system_contract::buyram>;
     using ramtransfer_action = eosio::action_wrapper<"ramtransfer"_n, &system_contract::ramtransfer>;
+    using logbuyram_action = eosio::action_wrapper<"logbuyram"_n, &system_contract::logbuyram>;
 
     struct [[eosio::table, eosio::contract("eosio.system")]] exchange_state {
         asset    supply;
