@@ -9,6 +9,8 @@ namespace eosio {
     * The `eosio.wram` contract is a contract that allows to wrap & unwrap system RAM at 1:1 using the `ramtransfer` method.
     */
    class [[eosio::contract("eosio.wram")]] wram : public contract {
+      const symbol RAM_SYMBOL = symbol("WRAM", 0);
+
       public:
          using contract::contract;
 

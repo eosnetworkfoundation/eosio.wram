@@ -21,7 +21,7 @@ void wram::wrap_ram( const name to, const int64_t bytes )
    check( bytes > 0, "bytes must be positive" ); // shouldn't be possible
 
    // issue RAM tokens
-   const asset quantity{bytes, eosiosystem::system_contract::ram_symbol};
+   const asset quantity{bytes, RAM_SYMBOL};
    eosio::token::issue_action issue_act{get_self(), {get_self(), "active"_n}};
    issue_act.send(get_self(), quantity, "wrap ram");
 
@@ -57,9 +57,10 @@ void wram::on_transfer( const name from, const name to, const asset quantity, co
 
    // validate incoming token transfer
    check(get_first_receiver() == get_self(), "Only the " + get_self().to_string() + " contract may send tokens to this contract.");
-   check(quantity.symbol == eosiosystem::system_contract::ram_symbol, "Only the system " + eosiosystem::system_contract::ram_symbol.code().to_string() + " token is accepted for transfers.");
+   check(quantity.symbol == RAM_SYMBOL, "Only the system " + RAM_SYMBOL.code().to_string() + " token is accepted for transfers.");
 }
 
+// block accidental transfers to eosio.* accounts
 void wram::block_receiver( const name receiver )
 {
    if ( receiver == get_self() ) { return; } // ignore self transfer (eosio.wram)

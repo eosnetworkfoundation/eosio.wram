@@ -8,6 +8,7 @@ const alice = 'alice'
 const bob = 'bob'
 const charles = 'charles'
 const system_accounts = ["eosio", "eosio.ram", "eosio.stake", "eosio.wrap", "eosio.token"]
+const RAM_SYMBOL = "WRAM"
 blockchain.createAccounts(bob, alice, charles, ...system_accounts)
 
 const wram_contract = 'eosio.wram'
@@ -63,8 +64,8 @@ describe(wram_contract, () => {
         await contracts.token.actions.transfer(['eosio.token', charles, '1000.0000 EOS', '']).send()
     })
 
-    test('eosio.token::issue::RAM', async () => {
-        const supply = `418945440768 RAM`
+    test('eosio.token::issue::WRAM', async () => {
+        const supply = `418945440768 ${RAM_SYMBOL}`
         await contracts.wram.actions.create([wram_contract, supply]).send()
     })
 
@@ -90,35 +91,35 @@ describe(wram_contract, () => {
         await contracts.fake.system.actions.buyrambytes([alice, alice, 10000]).send()
     })
 
-    test('fake.token::issue::RAM', async () => {
-        const supply = `10000000000000 RAM`
+    test('fake.token::issue::WRAM', async () => {
+        const supply = `10000000000000 ${RAM_SYMBOL}`
         await contracts.fake.token.actions.create(['fake.token', supply]).send()
         await contracts.fake.token.actions.issue(['fake.token', supply, '']).send()
-        await contracts.fake.token.actions.transfer(['fake.token', alice, '10000000 RAM', '']).send()
+        await contracts.fake.token.actions.transfer(['fake.token', alice, `10000000 ${RAM_SYMBOL}`, '']).send()
     })
 
-    test('on_notify::ramtransfer - wrap RAM', async () => {
+    test('on_notify::ramtransfer - wrap RAM bytes', async () => {
         const before = {
             wram_contract: {
                 bytes: getRamBytes(wram_contract),
-                RAM: getTokenBalance(wram_contract, "RAM"),
-                supply: getTokenSupply("RAM"),
+                RAM: getTokenBalance(wram_contract, RAM_SYMBOL),
+                supply: getTokenSupply(RAM_SYMBOL),
             },
             alice: {
                 bytes: getRamBytes(alice),
-                RAM: getTokenBalance(alice, "RAM"),
+                RAM: getTokenBalance(alice, RAM_SYMBOL),
             },
         }
         await contracts.system.actions.ramtransfer([alice, wram_contract, 1000, '']).send(alice)
         const after = {
             wram_contract: {
                 bytes: getRamBytes(wram_contract),
-                RAM: getTokenBalance(wram_contract, "RAM"),
-                supply: getTokenSupply("RAM"),
+                RAM: getTokenBalance(wram_contract, RAM_SYMBOL),
+                supply: getTokenSupply(RAM_SYMBOL),
             },
             alice: {
                 bytes: getRamBytes(alice),
-                RAM: getTokenBalance(alice, "RAM"),
+                RAM: getTokenBalance(alice, RAM_SYMBOL),
             },
         }
         // bytes
@@ -131,28 +132,28 @@ describe(wram_contract, () => {
         expect(after.wram_contract.supply - before.wram_contract.supply).toBe(1000)
     })
 
-    test('on_notify::buyrambytes - wrap RAM', async () => {
+    test('on_notify::buyrambytes - wrap RAM bytes', async () => {
         const before = {
             wram_contract: {
                 bytes: getRamBytes(wram_contract),
-                RAM: getTokenBalance(wram_contract, "RAM"),
-                supply: getTokenSupply("RAM"),
+                RAM: getTokenBalance(wram_contract, RAM_SYMBOL),
+                supply: getTokenSupply(RAM_SYMBOL),
             },
             alice: {
                 bytes: getRamBytes(alice),
-                RAM: getTokenBalance(alice, "RAM"),
+                RAM: getTokenBalance(alice, RAM_SYMBOL),
             },
         }
         await contracts.system.actions.buyrambytes([alice, wram_contract, 2000]).send(alice)
         const after = {
             wram_contract: {
                 bytes: getRamBytes(wram_contract),
-                RAM: getTokenBalance(wram_contract, "RAM"),
-                supply: getTokenSupply("RAM"),
+                RAM: getTokenBalance(wram_contract, RAM_SYMBOL),
+                supply: getTokenSupply(RAM_SYMBOL),
             },
             alice: {
                 bytes: getRamBytes(alice),
-                RAM: getTokenBalance(alice, "RAM"),
+                RAM: getTokenBalance(alice, RAM_SYMBOL),
             },
         }
         // bytes
@@ -165,28 +166,28 @@ describe(wram_contract, () => {
         expect(after.wram_contract.supply - before.wram_contract.supply).toBe(2000)
     })
 
-    test('transfer - unwrap RAM', async () => {
+    test('transfer - unwrap WRAM', async () => {
         const before = {
             wram_contract: {
                 bytes: getRamBytes(wram_contract),
-                RAM: getTokenBalance(wram_contract, "RAM"),
-                supply: getTokenSupply("RAM"),
+                RAM: getTokenBalance(wram_contract, RAM_SYMBOL),
+                supply: getTokenSupply(RAM_SYMBOL),
             },
             alice: {
                 bytes: getRamBytes(alice),
-                RAM: getTokenBalance(alice, "RAM"),
+                RAM: getTokenBalance(alice, RAM_SYMBOL),
             },
         }
-        await contracts.wram.actions.transfer([alice, wram_contract, "500 RAM", '']).send(alice)
+        await contracts.wram.actions.transfer([alice, wram_contract, `500 ${RAM_SYMBOL}`, '']).send(alice)
         const after = {
             wram_contract: {
                 bytes: getRamBytes(wram_contract),
-                RAM: getTokenBalance(wram_contract, "RAM"),
-                supply: getTokenSupply("RAM"),
+                RAM: getTokenBalance(wram_contract, RAM_SYMBOL),
+                supply: getTokenSupply(RAM_SYMBOL),
             },
             alice: {
                 bytes: getRamBytes(alice),
-                RAM: getTokenBalance(alice, "RAM"),
+                RAM: getTokenBalance(alice, RAM_SYMBOL),
             },
         }
         // bytes
@@ -199,26 +200,26 @@ describe(wram_contract, () => {
         expect(after.wram_contract.supply - before.wram_contract.supply).toBe(-500)
     })
 
-    test('transfer - RAM to another account', async () => {
+    test('transfer - WRAM to another account', async () => {
         const before = {
             bob: {
                 bytes: getRamBytes(bob),
-                RAM: getTokenBalance(bob, "RAM"),
+                RAM: getTokenBalance(bob, RAM_SYMBOL),
             },
             alice: {
                 bytes: getRamBytes(alice),
-                RAM: getTokenBalance(alice, "RAM"),
+                RAM: getTokenBalance(alice, RAM_SYMBOL),
             },
         }
-        await contracts.wram.actions.transfer([alice, bob, "500 RAM", '']).send(alice)
+        await contracts.wram.actions.transfer([alice, bob, `500 ${RAM_SYMBOL}`, '']).send(alice)
         const after = {
             bob: {
                 bytes: getRamBytes(bob),
-                RAM: getTokenBalance(bob, "RAM"),
+                RAM: getTokenBalance(bob, RAM_SYMBOL),
             },
             alice: {
                 bytes: getRamBytes(alice),
-                RAM: getTokenBalance(alice, "RAM"),
+                RAM: getTokenBalance(alice, RAM_SYMBOL),
             },
         }
 
@@ -232,28 +233,28 @@ describe(wram_contract, () => {
     })
 
     test('transfer - ignore', async () => {
-        const before = getTokenBalance(alice, "RAM");
+        const before = getTokenBalance(alice, RAM_SYMBOL);
         await contracts.system.actions.ramtransfer([alice, wram_contract, 1000, "ignore"]).send(alice)
-        const after = getTokenBalance(alice, "RAM")
+        const after = getTokenBalance(alice, RAM_SYMBOL)
         expect(after - before).toBe(0)
     })
 
     test('transfer::error - cannot transfer to eosio.* accounts', async () => {
         for ( const to of system_accounts) {
-            const action = contracts.wram.actions.transfer([alice, to, "1000 RAM", '']).send(alice)
+            const action = contracts.wram.actions.transfer([alice, to, `1000 ${RAM_SYMBOL}`, '']).send(alice)
             await expectToThrow(action, 'eosio_assert: cannot transfer to eosio.* accounts')
         }
     })
 
-    test('transfer::error - fake eosio.token RAM', async () => {
-        const action = contracts.fake.token.actions.transfer([alice, wram_contract, "1000 RAM", '']).send(alice)
+    test('transfer::error - fake eosio.token WRAM', async () => {
+        const action = contracts.fake.token.actions.transfer([alice, wram_contract, `1000 ${RAM_SYMBOL}`, '']).send(alice)
         await expectToThrow(action, 'eosio_assert_message: Only the eosio.wram contract may send tokens to this contract.')
     })
 
     test('transfer::error - fake eosio system RAM bytes', async () => {
-        const before = getTokenBalance(alice, "RAM");
+        const before = getTokenBalance(alice, RAM_SYMBOL);
         await contracts.fake.system.actions.ramtransfer([alice, wram_contract, 1000, alice]).send(alice)
-        const after = getTokenBalance(alice, "RAM")
+        const after = getTokenBalance(alice, RAM_SYMBOL)
         expect(after - before).toBe(0)
     })
 })
