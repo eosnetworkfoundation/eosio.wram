@@ -5,8 +5,9 @@ The `eosio.wram` contract is a contract that allows to wrap & unwrap system RAM 
 ## Token Contract
 
 - Contract: [`eosio.wram`](https://bloks.io/account/eosio.wram)
-- Symbol: `RAM`
+- Symbol: `RAM` or `WRAM`
 - Precision: `0`
+- Name: `EOS Wrapped RAM`
 
 ## RAM Wrapper Contract
 
