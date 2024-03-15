@@ -1,5 +1,6 @@
 #include <eosio/eosio.hpp>
 #include <eosio/system.hpp>
+#include <eosio/singleton.hpp>
 #include <eosio/asset.hpp>
 
 #include <string>
@@ -27,10 +28,11 @@ public:
     {
         const int64_t bytes = bytes_cost_with_fee(quant);
         add_ram(receiver, bytes);
+        reserve_ram(bytes);
 
         // log buy ram action
         system_contract::logbuyram_action logbuyram_act{get_self(), {get_self(), "active"_n}};
-        logbuyram_act.send(payer, receiver, asset{0, ramcore_symbol}, bytes, 0);
+        logbuyram_act.send(payer, receiver, quant, bytes, 0);
     }
 
     /**
@@ -45,6 +47,7 @@ public:
     void buyrambytes( const name& payer, const name& receiver, uint32_t bytes )
     {
         add_ram(receiver, bytes);
+        reserve_ram(bytes);
 
         // log buy ram action
         system_contract::logbuyram_action logbuyram_act{get_self(), {get_self(), "active"_n}};
@@ -62,6 +65,7 @@ public:
     void sellram( const name& account, int64_t bytes )
     {
         add_ram(account, -bytes);
+        reserve_ram(-bytes);
     }
 
     /**
@@ -99,11 +103,12 @@ public:
     [[eosio::action]]
     void init()
     {
-        rammarket _rammarket("eosio"_n, "eosio"_n.value);
+        // set ram market
+        rammarket _rammarket(get_self(), get_self().value);
         auto itr = _rammarket.find(symbol("RAMCORE", 4).raw());
 
         if (itr == _rammarket.end()) {
-            _rammarket.emplace("eosio"_n, [&](auto& m) {
+            _rammarket.emplace(get_self(), [&](auto& m) {
                 m.supply.amount = 100000000000000;
                 m.supply.symbol = symbol("RAMCORE", 4);
                 m.base.balance.amount = 129542469746;
@@ -112,6 +117,13 @@ public:
                 m.quote.balance.symbol = symbol("EOS", 4);
             });
         }
+
+        // set global state
+        global_state_singleton _global(get_self(), get_self().value);
+        eosio_global_state global;
+        global.max_ram_size = 418945440768;
+        global.total_ram_bytes_reserved = 321908101425;
+        _global.set(global, get_self());
     }
 
     // action wrappers
@@ -144,13 +156,143 @@ public:
         uint64_t primary_key()const { return owner.value; }
     };
 
+   // Defines new global state parameters.
+   struct [[eosio::table("global"), eosio::contract("eosio.system")]] eosio_global_state {
+
+      /**
+       * The blockchain parameters
+       * https://github.com/AntelopeIO/cdt/blob/26289ffcaa40f8531ddbeeb8c11697c3c6a70fac/libraries/eosiolib/contracts/eosio/privileged.hpp#L46C1-L167C6
+       */
+
+      /**
+      * The maximum net usage in instructions for a block
+      * @brief the maximum net usage in instructions for a block
+      */
+      uint64_t max_block_net_usage;
+
+      /**
+      * The target percent (1% == 100, 100%= 10,000) of maximum net usage; exceeding this triggers congestion handling
+      * @brief The target percent (1% == 100, 100%= 10,000) of maximum net usage; exceeding this triggers congestion handling
+      */
+      uint32_t target_block_net_usage_pct;
+
+      /**
+      * The maximum objectively measured net usage that the chain will allow regardless of account limits
+      * @brief The maximum objectively measured net usage that the chain will allow regardless of account limits
+      */
+      uint32_t max_transaction_net_usage;
+
+      /**
+       * The base amount of net usage billed for a transaction to cover incidentals
+       */
+      uint32_t base_per_transaction_net_usage;
+
+      /**
+       * The amount of net usage leeway available whilst executing a transaction (still checks against new limits without leeway at the end of the transaction)
+       * @brief The amount of net usage leeway available whilst executing a transaction  (still checks against new limits without leeway at the end of the transaction)
+       */
+      uint32_t net_usage_leeway;
+
+      /**
+      * The numerator for the discount on net usage of context-free data
+      * @brief The numerator for the discount on net usage of context-free data
+      */
+      uint32_t context_free_discount_net_usage_num;
+
+      /**
+      * The denominator for the discount on net usage of context-free data
+      * @brief The denominator for the discount on net usage of context-free data
+      */
+      uint32_t context_free_discount_net_usage_den;
+
+      /**
+      * The maximum billable cpu usage (in microseconds) for a block
+      * @brief The maximum billable cpu usage (in microseconds) for a block
+      */
+      uint32_t max_block_cpu_usage;
+
+      /**
+      * The target percent (1% == 100, 100%= 10,000) of maximum cpu usage; exceeding this triggers congestion handling
+      * @brief The target percent (1% == 100, 100%= 10,000) of maximum cpu usage; exceeding this triggers congestion handling
+      */
+      uint32_t target_block_cpu_usage_pct;
+
+      /**
+      * The maximum billable cpu usage (in microseconds) that the chain will allow regardless of account limits
+      * @brief The maximum billable cpu usage (in microseconds) that the chain will allow regardless of account limits
+      */
+      uint32_t max_transaction_cpu_usage;
+
+      /**
+      * The minimum billable cpu usage (in microseconds) that the chain requires
+      * @brief The minimum billable cpu usage (in microseconds) that the chain requires
+      */
+      uint32_t min_transaction_cpu_usage;
+
+      /**
+       * Maximum lifetime of a transacton
+       * @brief Maximum lifetime of a transacton
+       */
+      uint32_t max_transaction_lifetime;
+
+      /**
+      * The number of seconds after the time a deferred transaction can first execute until it expires
+      * @brief the number of seconds after the time a deferred transaction can first execute until it expires
+      */
+      uint32_t deferred_trx_expiration_window;
+
+
+      /**
+      * The maximum number of seconds that can be imposed as a delay requirement by authorization checks
+      * @brief The maximum number of seconds that can be imposed as a delay requirement by authorization checks
+      */
+      uint32_t max_transaction_delay;
+
+      /**
+       * Maximum size of inline action
+       * @brief Maximum size of inline action
+       */
+      uint32_t max_inline_action_size;
+
+      /**
+       * Maximum depth of inline action
+       * @brief Maximum depth of inline action
+       */
+      uint16_t max_inline_action_depth;
+
+      /**
+       * Maximum authority depth
+       * @brief Maximum authority depth
+       */
+      uint16_t max_authority_depth;
+
+      uint64_t free_ram()const { return max_ram_size - total_ram_bytes_reserved; }
+
+      uint64_t             max_ram_size = 64ll*1024 * 1024 * 1024;
+      uint64_t             total_ram_bytes_reserved = 0;
+      int64_t              total_ram_stake = 0;
+
+      block_timestamp      last_producer_schedule_update;
+      time_point           last_pervote_bucket_fill;
+      int64_t              pervote_bucket = 0;
+      int64_t              perblock_bucket = 0;
+      uint32_t             total_unpaid_blocks = 0; /// all blocks which have been produced but not paid
+      int64_t              total_activated_stake = 0;
+      time_point           thresh_activated_stake_time;
+      uint16_t             last_producer_schedule_size = 0;
+      double               total_producer_vote_weight = 0; /// the sum of all producer votes
+      block_timestamp      last_name_close;
+   };
+   typedef eosio::singleton< "global"_n, eosio_global_state >   global_state_singleton;
+
     typedef eosio::multi_index< "userres"_n, user_resources >      user_resources_table;
 
     int64_t add_ram( const name& owner, int64_t bytes ) {
         require_recipient( owner );
+
+        // update user resources
         user_resources_table _userres( get_self(), owner.value );
         auto res_itr = _userres.find( owner.value );
-
         if ( res_itr == _userres.end() ) {
             _userres.emplace( get_self(), [&]( auto& res ) {
                 res.owner = owner;
@@ -164,7 +306,16 @@ public:
                 res.ram_bytes += bytes;
             });
         }
+
         return res_itr->ram_bytes;
+    }
+
+    void reserve_ram( int64_t bytes ) {
+        // update global state
+        global_state_singleton _global(get_self(), get_self().value);
+        eosio_global_state global = _global.get();
+        global.total_ram_bytes_reserved += bytes;
+        _global.set(global, get_self());
     }
 
     int64_t get_bancor_output(int64_t inp_reserve, int64_t out_reserve, int64_t inp)

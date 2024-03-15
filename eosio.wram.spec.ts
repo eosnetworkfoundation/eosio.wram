@@ -64,17 +64,25 @@ describe(wram_contract, () => {
         await contracts.token.actions.transfer(['eosio.token', charles, '1000.0000 EOS', '']).send()
     })
 
-    test('eosio.token::issue::WRAM', async () => {
+    test('eosio.token::create::WRAM', async () => {
         const supply = `418945440768 ${RAM_SYMBOL}`
         await contracts.wram.actions.create([wram_contract, supply]).send()
+        expect(getTokenBalance(wram_contract, RAM_SYMBOL)).toBe(321908101425);
     })
 
     test('eosio::buyrambytes', async () => {
         const before = getRamBytes(alice)
-        await contracts.system.actions.buyrambytes([alice, alice, 10000]).send()
+        await contracts.system.actions.buyrambytes([alice, alice, 10000]).send() // doesn't trigger mirror system RAM
         const after = getRamBytes(alice)
         expect(after - before).toBe(10000)
     })
+
+    test('buyrambytes - mirror system RAM', async () => {
+        const before = getTokenSupply(RAM_SYMBOL);
+        await contracts.system.actions.buyrambytes([alice, wram_contract, 100]).send()
+        const after = getTokenSupply(RAM_SYMBOL);
+        expect(after - before).toBe(10100);
+    });
 
     test('eosio::ramtransfer', async () => {
         const before = getRamBytes(bob)
@@ -88,7 +96,10 @@ describe(wram_contract, () => {
     });
 
     test('fake::buyrambytes', async () => {
+        const before = getTokenBalance(wram_contract, RAM_SYMBOL);
         await contracts.fake.system.actions.buyrambytes([alice, alice, 10000]).send()
+        const after = getTokenBalance(wram_contract, RAM_SYMBOL);
+        expect(after - before).toBe(0);
     })
 
     test('fake.token::issue::WRAM', async () => {
@@ -128,8 +139,8 @@ describe(wram_contract, () => {
 
         // RAM
         expect(after.alice.RAM - before.alice.RAM).toBe(1000)
-        expect(after.wram_contract.RAM - before.wram_contract.RAM).toBe(0)
-        expect(after.wram_contract.supply - before.wram_contract.supply).toBe(1000)
+        expect(after.wram_contract.RAM - before.wram_contract.RAM).toBe(-1000)
+        expect(after.wram_contract.supply - before.wram_contract.supply).toBe(0)
     })
 
     test('on_notify::buyrambytes - wrap RAM bytes', async () => {
@@ -191,13 +202,13 @@ describe(wram_contract, () => {
             },
         }
         // bytes
-        expect(after.alice.bytes - before.alice.bytes).toBe(+500)
+        expect(after.alice.bytes - before.alice.bytes).toBe(500)
         expect(after.wram_contract.bytes - before.wram_contract.bytes).toBe(-500)
 
         // RAM
         expect(after.alice.RAM - before.alice.RAM).toBe(-500)
-        expect(after.wram_contract.RAM - before.wram_contract.RAM).toBe(0)
-        expect(after.wram_contract.supply - before.wram_contract.supply).toBe(-500)
+        expect(after.wram_contract.RAM - before.wram_contract.RAM).toBe(500)
+        expect(after.wram_contract.supply - before.wram_contract.supply).toBe(0)
     })
 
     test('transfer - WRAM to another account', async () => {

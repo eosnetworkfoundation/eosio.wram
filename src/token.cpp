@@ -19,6 +19,9 @@ void wram::create( const name& issuer, const asset&  maximum_supply )
        s.max_supply    = maximum_supply;
        s.issuer        = issuer;
     });
+
+    // issue initial WRAM token to contract based on system RAM (total_ram_bytes_reserved)
+    mirror_system_ram();
 }
 
 
@@ -112,8 +115,8 @@ void wram::sub_balance( const name& owner, const asset& value ) {
    check( from.balance.amount >= value.amount, "overdrawn balance" );
 
    from_acnts.modify( from, owner, [&]( auto& a ) {
-         a.balance -= value;
-      });
+      a.balance -= value;
+   });
 }
 
 void wram::add_balance( const name& owner, const asset& value, const name& ram_payer )

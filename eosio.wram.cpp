@@ -6,10 +6,7 @@ namespace eosio {
 void wram::unwrap_ram( const name to, const asset quantity )
 {
    check( quantity.amount > 0, "quantity must be positive" ); // shouldn't be possible
-
-   // burn RAM tokens
-   eosio::token::retire_action retire_act{get_self(), {get_self(), "active"_n}};
-   retire_act.send(quantity, "unwrap ram");
+   mirror_system_ram(); // update RAM supply
 
    // ramtransfer to user
    eosiosystem::system_contract::ramtransfer_action ramtransfer_act{"eosio"_n, {get_self(), "active"_n}};
@@ -19,15 +16,39 @@ void wram::unwrap_ram( const name to, const asset quantity )
 void wram::wrap_ram( const name to, const int64_t bytes )
 {
    check( bytes > 0, "bytes must be positive" ); // shouldn't be possible
-
-   // issue RAM tokens
-   const asset quantity{bytes, RAM_SYMBOL};
-   eosio::token::issue_action issue_act{get_self(), {get_self(), "active"_n}};
-   issue_act.send(get_self(), quantity, "wrap ram");
+   mirror_system_ram(); // update RAM supply
 
    // transfer RAM tokens to user
+   const asset quantity{bytes, RAM_SYMBOL};
    eosio::token::transfer_action transfer_act{get_self(), {get_self(), "active"_n}};
    transfer_act.send(get_self(), to, quantity, "wrap ram");
+}
+
+eosiosystem::eosio_global_state wram::get_global()
+{
+   eosiosystem::global_state_singleton _global( "eosio"_n, "eosio"_n.value );
+   check( _global.exists(), "global state does not exist" );
+   auto global = _global.get();
+   return global;
+}
+
+void wram::mirror_system_ram()
+{
+   auto global = get_global();
+   const int64_t total_ram_bytes_reserved = global.total_ram_bytes_reserved;
+   const asset supply = eosio::token::get_supply(get_self(), RAM_SYMBOL.code());
+   const int64_t delta = total_ram_bytes_reserved - supply.amount;
+
+   // issue supply
+   if (delta > 0) {
+      eosio::token::issue_action issue_act{get_self(), {get_self(), "active"_n}};
+      issue_act.send(get_self(), asset{delta, RAM_SYMBOL}, "mirror ram");
+
+   // retire supply
+   } else if (delta < 0) {
+      eosio::token::retire_action retire_act{get_self(), {get_self(), "active"_n}};
+      retire_act.send(asset{-delta, RAM_SYMBOL}, "mirror ram");
+   }
 }
 
 [[eosio::on_notify("eosio::logbuyram")]]

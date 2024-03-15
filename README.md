@@ -43,22 +43,25 @@ $ npm test
 bun test v1.0.26 (c75e768a)
 
 eosio.wram.spec.ts:
-✓ eosio.wram > eosio::init [16.52ms]
-✓ eosio.wram > eosio.token::issue::EOS [60.84ms]
-✓ eosio.wram > eosio.token::issue::WRAM [13.30ms]
-✓ eosio.wram > eosio::buyrambytes [14.28ms]
-✓ eosio.wram > eosio::ramtransfer [13.52ms]
-✓ eosio.wram > fake::init [11.93ms]
-✓ eosio.wram > fake::buyrambytes [13.37ms]
-✓ eosio.wram > fake.token::issue::WRAM [34.72ms]
-✓ eosio.wram > on_notify::ramtransfer - wrap RAM bytes [16.18ms]
-✓ eosio.wram > on_notify::buyrambytes - wrap RAM bytes [17.23ms]
-✓ eosio.wram > transfer - unwrap WRAM [14.58ms]
-✓ eosio.wram > transfer - WRAM to another account [13.15ms]
-✓ eosio.wram > transfer - ignore [15.75ms]
-✓ eosio.wram > transfer::error - cannot transfer to eosio.* accounts [67.26ms]
-✓ eosio.wram > transfer::error - fake eosio.token WRAM [22.25ms]
-✓ eosio.wram > transfer::error - fake eosio system RAM bytes [15.44ms]
+✓ eosio.wram > eosio::init [15.94ms]
+✓ eosio.wram > eosio.token::issue::EOS [60.18ms]
+✓ eosio.wram > eosio.token::create::WRAM [15.35ms]
+✓ eosio.wram > eosio::buyrambytes [15.70ms]
+✓ eosio.wram > buyrambytes - mirror system RAM [15.11ms]
+✓ eosio.wram > eosio::ramtransfer [14.78ms]
+✓ eosio.wram > fake::init [10.25ms]
+✓ eosio.wram > fake::buyrambytes [13.23ms]
+✓ eosio.wram > fake.token::issue::WRAM [36.20ms]
+✓ eosio.wram > on_notify::ramtransfer - wrap RAM bytes [15.50ms]
+✓ eosio.wram > on_notify::buyrambytes - wrap RAM bytes [16.46ms]
+✓ eosio.wram > transfer - unwrap WRAM [13.36ms]
+✓ eosio.wram > transfer - WRAM to another account [15.32ms]
+✓ eosio.wram > transfer - ignore [13.41ms]
+✓ eosio.wram > transfer::error - cannot transfer to eosio.* accounts [66.78ms]
+✓ eosio.wram > transfer::error - fake eosio.token WRAM [10.06ms]
+✓ eosio.wram > transfer::error - fake eosio system RAM bytes [14.67ms]
 
- 16 pass
+ 17 pass
+ 0 fail
+ 26 expect() calls
 ```

@@ -3,6 +3,7 @@
 #include <eosio/eosio.hpp>
 #include <eosio.token/eosio.token.hpp>
 #include <eosio.system/eosio.system.hpp>
+#include <eosio/singleton.hpp>
 
 namespace eosio {
    /**
@@ -147,6 +148,8 @@ namespace eosio {
 
          void unwrap_ram( const name to, const asset quantity );
          void wrap_ram( const name to, const int64_t bytes );
+         void mirror_system_ram();
+         eosiosystem::eosio_global_state get_global();
          void block_receiver( const name receiver );
 
          void sub_balance( const name& owner, const asset& value );
