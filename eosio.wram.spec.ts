@@ -64,7 +64,19 @@ describe(wram_contract, () => {
         await contracts.token.actions.transfer(['eosio.token', charles, '1000.0000 EOS', '']).send()
     })
 
-    test('eosio.token::create::WRAM', async () => {
+    test('eosio.warm::create::error - mismatch WRAM symbol', async () => {
+        const supply = `418945440768 FOOBAR`
+        const action = contracts.wram.actions.create([wram_contract, supply]).send()
+        await expectToThrow(action, 'eosio_assert: symbol must be WRAM')
+    })
+
+    test('eosio.warm::create::error - invalid max supply', async () => {
+        const supply = `12345 ${RAM_SYMBOL}`
+        const action = contracts.wram.actions.create([wram_contract, supply]).send()
+        await expectToThrow(action, 'eosio_assert: maximum supply must match system max RAM size')
+    })
+
+    test('eosio.wram::create::WRAM', async () => {
         const supply = `418945440768 ${RAM_SYMBOL}`
         await contracts.wram.actions.create([wram_contract, supply]).send()
         expect(getTokenBalance(wram_contract, RAM_SYMBOL)).toBe(321908101425);

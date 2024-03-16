@@ -20,6 +20,11 @@ void wram::create( const name& issuer, const asset&  maximum_supply )
        s.issuer        = issuer;
     });
 
+    // max supply must match system RAM
+    const auto global = get_global();
+    check( maximum_supply.amount == global.max_ram_size, "maximum supply must match system max RAM size" );
+    check( maximum_supply.symbol == RAM_SYMBOL, "symbol must be WRAM" );
+
     // issue initial WRAM token to contract based on system RAM (total_ram_bytes_reserved)
     mirror_system_ram();
 }
