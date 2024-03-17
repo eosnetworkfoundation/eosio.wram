@@ -7,9 +7,9 @@ const blockchain = new Blockchain()
 const alice = 'alice'
 const bob = 'bob'
 const charles = 'charles'
-const system_accounts = ["eosio", "eosio.ram", "eosio.stake", "eosio.wrap", "eosio.token"]
+const block_receivers = ["eosio.ram"]
 const RAM_SYMBOL = "WRAM"
-blockchain.createAccounts(bob, alice, charles, ...system_accounts)
+blockchain.createAccounts(bob, alice, charles, ...block_receivers)
 
 const wram_contract = 'eosio.wram'
 const contracts = {
@@ -262,10 +262,10 @@ describe(wram_contract, () => {
         expect(after - before).toBe(0)
     })
 
-    test('transfer::error - cannot transfer to eosio.* accounts', async () => {
-        for ( const to of system_accounts) {
+    test('transfer::error - cannot transfer to eosio.ram account', async () => {
+        for ( const to of block_receivers) {
             const action = contracts.wram.actions.transfer([alice, to, `1000 ${RAM_SYMBOL}`, '']).send(alice)
-            await expectToThrow(action, 'eosio_assert: cannot transfer to eosio.* accounts')
+            await expectToThrow(action, 'eosio_assert: cannot transfer to eosio.ram account')
         }
     })
 

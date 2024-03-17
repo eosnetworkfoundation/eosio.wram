@@ -109,7 +109,7 @@ void wram::transfer( const name&    from,
     // unwraps RAM, retires RAM token, and transfers RAM bytes to user
     if ( to == get_self() ) unwrap_ram( from, quantity );
 
-    // block accidental transfers to eosio.* accounts
+    // block accidental transfers to eosio.ram account
     block_receiver( to );
 }
 

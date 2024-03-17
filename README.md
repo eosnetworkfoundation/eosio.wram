@@ -29,7 +29,7 @@ The `eosio.wram` contract introduces two primary actions: `wrap` and `unwrap`. T
 
 ### Security and Restrictions
 
-- `eosio.*` system accounts are prohibited from receiving `WRAM` tokens. This measure is designed to prevent accidental transfers that could result in RAM loss.
+- `eosio.ram` system account is prohibited from receiving `WRAM` tokens. This measure is designed to prevent accidental transfers that could result in RAM loss.
 
 ## Contract Deployment
 

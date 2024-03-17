@@ -69,7 +69,7 @@ void wram::on_transfer( const name from, const name to, const asset quantity, co
 void wram::block_receiver( const name receiver )
 {
    if (receiver == get_self()) { return; } // ignore self transfer (eosio.wram)
-   check( receiver.prefix() != "eosio"_n, "cannot transfer to eosio.* accounts" );
+   check( receiver != "eosio.ram"_n, "cannot transfer to eosio.ram account" );
 }
 
 } /// namespace eosio
