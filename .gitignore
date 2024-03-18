@@ -1,7 +1,7 @@
 *.abi
 *.wasm
-!/include/**/*.abi
-!/include/**/*.wasm
+!/external/**/*.abi
+!/external/**/*.wasm
 node_modules
 .DS_Store
 

@@ -1,8 +1,8 @@
 namespace eosio {
 
-eosiosystem::eosio_global_state wram::get_global()
+eosiosystem::system_contract::eosio_global_state wram::get_global()
 {
-   eosiosystem::global_state_singleton _global( "eosio"_n, "eosio"_n.value );
+   eosiosystem::system_contract::global_state_singleton _global( "eosio"_n, "eosio"_n.value );
    check( _global.exists(), "global state does not exist" );
    auto global = _global.get();
    return global;

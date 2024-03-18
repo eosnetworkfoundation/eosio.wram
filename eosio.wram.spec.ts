@@ -14,11 +14,11 @@ blockchain.createAccounts(bob, alice, charles, ...block_receivers)
 const wram_contract = 'eosio.wram'
 const contracts = {
     wram: blockchain.createContract(wram_contract, wram_contract, true),
-    token: blockchain.createContract('eosio.token', 'include/eosio.token/eosio.token', true),
-    system: blockchain.createContract('eosio', 'include/eosio.system/eosio', true),
+    token: blockchain.createContract('eosio.token', 'external/eosio.token/eosio.token', true),
+    system: blockchain.createContract('eosio', 'external/eosio.system/eosio', true),
     fake: {
-        token: blockchain.createContract('fake.token', 'include/eosio.token/eosio.token', true),
-        system: blockchain.createContract('fake', 'include/eosio.system/eosio', true),
+        token: blockchain.createContract('fake.token', 'external/eosio.token/eosio.token', true),
+        system: blockchain.createContract('fake', 'external/eosio.system/eosio', true),
     },
 }
 
