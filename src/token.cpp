@@ -1,5 +1,3 @@
-#include <eosio.token/eosio.token.hpp>
-
 namespace eosio {
 
 void wram::create( const name& issuer, const asset&  maximum_supply )

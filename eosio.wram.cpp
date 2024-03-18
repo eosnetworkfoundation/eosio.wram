@@ -32,7 +32,7 @@ void wram::wrap_ram( const name to, const int64_t bytes )
 
    // transfer RAM tokens to user
    const asset quantity{bytes, RAM_SYMBOL};
-   eosio::token::transfer_action transfer_act{get_self(), {get_self(), "active"_n}};
+   transfer_action transfer_act{get_self(), {get_self(), "active"_n}};
    transfer_act.send(get_self(), to, quantity, "wrap ram");
 }
 

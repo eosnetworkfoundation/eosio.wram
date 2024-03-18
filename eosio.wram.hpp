@@ -1,9 +1,10 @@
 #pragma once
 
 #include <eosio/eosio.hpp>
-#include <eosio.token/eosio.token.hpp>
 #include <eosio.system/eosio.system.hpp>
 #include <eosio/singleton.hpp>
+
+using namespace std;
 
 namespace eosio {
    /**
@@ -122,12 +123,12 @@ namespace eosio {
             return ac.balance;
          }
 
-         using create_action = eosio::action_wrapper<"create"_n, &token::create>;
-         using issue_action = eosio::action_wrapper<"issue"_n, &token::issue>;
-         using retire_action = eosio::action_wrapper<"retire"_n, &token::retire>;
-         using transfer_action = eosio::action_wrapper<"transfer"_n, &token::transfer>;
-         using open_action = eosio::action_wrapper<"open"_n, &token::open>;
-         using close_action = eosio::action_wrapper<"close"_n, &token::close>;
+         using create_action = eosio::action_wrapper<"create"_n, &wram::create>;
+         using issue_action = eosio::action_wrapper<"issue"_n, &wram::issue>;
+         using retire_action = eosio::action_wrapper<"retire"_n, &wram::retire>;
+         using transfer_action = eosio::action_wrapper<"transfer"_n, &wram::transfer>;
+         using open_action = eosio::action_wrapper<"open"_n, &wram::open>;
+         using close_action = eosio::action_wrapper<"close"_n, &wram::close>;
       private:
          struct [[eosio::table]] account {
             asset    balance;
@@ -149,7 +150,7 @@ namespace eosio {
          void unwrap_ram( const name to, const asset quantity );
          void wrap_ram( const name to, const int64_t bytes );
          void mirror_system_ram();
-         eosiosystem::eosio_global_state get_global();
+         eosiosystem::system_contract::eosio_global_state get_global();
          void block_receiver( const name receiver );
 
          void sub_balance( const name& owner, const asset& value );
