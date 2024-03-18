@@ -62,7 +62,7 @@ void wram::on_transfer( const name from, const name to, const asset quantity, co
    if (to != get_self()) { return; }
 
    // unwrap is triggered by internal transfer method
-   check(false, "Only the " + get_self().to_string() + " contract may send tokens to this contract.");
+   check(false, "only " + get_self().to_string() + " token transfers are allowed");
 }
 
 // block accidental transfers to eosio.* accounts

@@ -271,7 +271,22 @@ describe(wram_contract, () => {
 
     test('transfer::error - fake eosio.token WRAM', async () => {
         const action = contracts.fake.token.actions.transfer([alice, wram_contract, `1000 ${RAM_SYMBOL}`, '']).send(alice)
-        await expectToThrow(action, 'eosio_assert_message: Only the eosio.wram contract may send tokens to this contract.')
+        await expectToThrow(action, 'eosio_assert_message: only eosio.wram token transfers are allowed')
+    })
+
+    test('transfer::error - not allowed to send EOS or any eosio.token', async () => {
+        const action = contracts.token.actions.transfer([alice, wram_contract, `1000.0000 EOS`, '']).send(alice)
+        await expectToThrow(action, 'eosio_assert_message: only eosio.wram token transfers are allowed')
+    })
+
+    test('transfer::error - missing required authority eosio.token', async () => {
+        const action = contracts.token.actions.transfer([alice, wram_contract, `1000.0000 EOS`, '']).send(bob)
+        await expectToThrow(action, 'missing required authority alice')
+    })
+
+    test('transfer::error - missing required authority eosio.wram', async () => {
+        const action = contracts.wram.actions.transfer([alice, wram_contract, `10 ${RAM_SYMBOL}`, '']).send(bob)
+        await expectToThrow(action, 'missing required authority alice')
     })
 
     test('transfer::error - fake eosio system RAM bytes', async () => {
