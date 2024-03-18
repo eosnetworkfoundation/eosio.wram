@@ -93,3 +93,21 @@ icon: https://gateway.pinata.cloud/ipfs/QmZ4HSZDuSrZ4BHawtZRhVfwyYJ4DepNJqVDzxY5
 If {{from}} is not already the RAM payer of their {{asset_to_symbol_code quantity}} token balance, {{from}} will be designated as such. As a result, RAM will be deducted from {{from}}’s resources to refund the original RAM payer.
 
 If {{to}} does not have a balance for {{asset_to_symbol_code quantity}}, {{from}} will be designated as the RAM payer of the {{asset_to_symbol_code quantity}} token balance for {{to}}. As a result, RAM will be deducted from {{from}}’s resources to create the necessary records.
+
+<h1 class="contract">addegress</h1>
+
+---
+spec_version: "0.2.0"
+title: Add egress accounts
+summary: 'Add {{nowrap accounts}}’s to egress list'
+icon: https://gateway.pinata.cloud/ipfs/QmZ4HSZDuSrZ4BHawtZRhVfwyYJ4DepNJqVDzxY59KveiM#3830f1ce8cb07f7757dbcf383b1ec1b11914ac34a1f9d8b065f07600fa9dac19
+---
+
+<h1 class="contract">removeegress</h1>
+
+---
+spec_version: "0.2.0"
+title: Remove egress accounts
+summary: 'Remove {{nowrap accounts}}’s to egress list'
+icon: https://gateway.pinata.cloud/ipfs/QmZ4HSZDuSrZ4BHawtZRhVfwyYJ4DepNJqVDzxY59KveiM#3830f1ce8cb07f7757dbcf383b1ec1b11914ac34a1f9d8b065f07600fa9dac19
+---
