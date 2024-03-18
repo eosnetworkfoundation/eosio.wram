@@ -17,6 +17,36 @@ namespace eosio {
          using contract::contract;
 
          /**
+          * ## TABLE `egresslist`
+          *
+          * > block transfers to any account in the egress list
+          *
+          * ### params
+          *
+          * - `{name} account` - egress account not allowed to receive tokens
+          *
+          * ### example
+          *
+          * ```json
+          * {
+          *     "account": "eosio.ram"
+          * }
+          * ```
+          */
+         struct [[eosio::table("egresslist")]] egresslist_row {
+            name     account;
+
+            uint64_t primary_key()const { return account.value; }
+         };
+         typedef eosio::multi_index< "egresslist"_n, egresslist_row > egresslist;
+
+         [[eosio::action]]
+         void addegress( const set<name> accounts );
+
+         [[eosio::action]]
+         void removeegress( const set<name> accounts );
+
+         /**
           * Send system RAM `bytes` to contract to issue `RAM` tokens to sender.
           */
          [[eosio::on_notify("eosio::ramtransfer")]]
@@ -151,7 +181,7 @@ namespace eosio {
          void wrap_ram( const name to, const int64_t bytes );
          void mirror_system_ram();
          eosiosystem::system_contract::eosio_global_state get_global();
-         void block_receiver( const name receiver );
+         void check_disable_transfer( const name receiver );
 
          void sub_balance( const name& owner, const asset& value );
          void add_balance( const name& owner, const asset& value, const name& ram_payer );

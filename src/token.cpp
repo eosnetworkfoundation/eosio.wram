@@ -105,10 +105,11 @@ void wram::transfer( const name&    from,
 
     // user sends RAM token to contract
     // unwraps RAM, retires RAM token, and transfers RAM bytes to user
+    // cannot use `on_notify` because contract cannot send inline action notifications to itself
     if ( to == get_self() ) unwrap_ram( from, quantity );
 
-    // block accidental transfers to eosio.ram account
-    block_receiver( to );
+    // disable transfers to accounts on egress list
+    check_disable_transfer( to );
 }
 
 void wram::sub_balance( const name& owner, const asset& value ) {
