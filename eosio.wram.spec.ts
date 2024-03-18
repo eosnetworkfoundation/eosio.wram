@@ -7,9 +7,9 @@ const blockchain = new Blockchain()
 const alice = 'alice'
 const bob = 'bob'
 const charles = 'charles'
-const block_receivers = ["eosio.ram"]
+const egress_list = ["eosio.ram"]
 const RAM_SYMBOL = "WRAM"
-blockchain.createAccounts(bob, alice, charles, ...block_receivers)
+blockchain.createAccounts(bob, alice, charles, ...egress_list)
 
 const wram_contract = 'eosio.wram'
 const contracts = {
@@ -48,6 +48,15 @@ function getRamBytes(account: string) {
         .getTableRow(scope)
     if (!row) return 0
     return Int64.from(row.ram_bytes).toNumber()
+}
+
+function getEgressList(account: string) {
+    const primary_key = Name.from(account).value.value
+    const row = contracts.wram.tables
+        .egresslist(Name.from(wram_contract).value.value)
+        .getTableRow(primary_key)
+    if (!row) return ""
+    return Name.from(row.account).toString()
 }
 
 describe(wram_contract, () => {
@@ -262,10 +271,24 @@ describe(wram_contract, () => {
         expect(after - before).toBe(0)
     })
 
-    test('transfer::error - cannot transfer to eosio.ram account', async () => {
-        for ( const to of block_receivers) {
+    test('egresslist - addegress', async () => {
+        await contracts.wram.actions.addegress([egress_list]).send(wram_contract)
+        for ( const to of egress_list) {
+            expect(getEgressList(to)).toBe(to)
+        }
+    })
+
+    test('egresslist::transfer::error - cannot transfer to egress list', async () => {
+        for ( const to of egress_list) {
             const action = contracts.wram.actions.transfer([alice, to, `1000 ${RAM_SYMBOL}`, '']).send(alice)
-            await expectToThrow(action, 'eosio_assert: cannot transfer to eosio.ram account')
+            await expectToThrow(action, 'eosio_assert: transfer disabled to account')
+        }
+    })
+
+    test('egresslist - removeegress', async () => {
+        await contracts.wram.actions.removeegress([egress_list]).send(wram_contract)
+        for ( const to of egress_list) {
+            expect(getEgressList(to)).toBe("")
         }
     })
 

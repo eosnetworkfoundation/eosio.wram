@@ -1,6 +1,7 @@
 #include "eosio.wram.hpp"
 #include "src/token.cpp"
 #include "src/mirror.cpp"
+#include "src/egress.cpp"
 
 namespace eosio {
 
@@ -63,13 +64,6 @@ void wram::on_transfer( const name from, const name to, const asset quantity, co
 
    // unwrap is triggered by internal transfer method
    check(false, "only " + get_self().to_string() + " token transfers are allowed");
-}
-
-// block accidental transfers to eosio.* accounts
-void wram::block_receiver( const name receiver )
-{
-   if (receiver == get_self()) { return; } // ignore self transfer (eosio.wram)
-   check( receiver != "eosio.ram"_n, "cannot transfer to eosio.ram account" );
 }
 
 } /// namespace eosio
