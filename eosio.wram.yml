@@ -1,0 +1,23 @@
+owner:
+  threshold: 1
+  accounts:
+  - permission:
+      actor: eosio
+      permission: active
+    weight: 1
+
+active:
+  threshold: 2
+  accounts:
+  - permission:
+      actor: enf
+      permission: active
+    weight: 1
+  - permission:
+      actor: eosio.prods
+      permission: prod.minor
+    weight: 1
+  - permission:
+      actor: eosio.wrap
+      permission: eosio.code
+    weight: 2

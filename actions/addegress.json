@@ -1,0 +1,13 @@
+{
+  "actions": [{
+      "account": "eosio.wram",
+      "name": "addegress",
+      "authorization": [{
+          "actor": "eosio.wram",
+          "permission": "active"
+        }
+      ],
+      "data": "01000090e602ea3055"
+    }
+  ]
+}

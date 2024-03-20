@@ -1,0 +1,26 @@
+{
+  "actions": [
+    {
+      "account": "eosio",
+      "name": "newaccount",
+      "authorization": [
+        {
+          "actor": "eosio",
+          "permission": "active"
+        }
+      ],
+      "data": "0000000000ea30550080349703ea30550100000000010000000000ea305500000000a8ed3232010000020000000003000000000000d65400000000a8ed323201000070a2b702ea305500c0a5d34990e8ad01000040359703ea305500804a1401ea3055020000"
+    },
+    {
+      "account": "eosio",
+      "name": "buyrambytes",
+      "authorization": [
+        {
+          "actor": "eosio",
+          "permission": "active"
+        }
+      ],
+      "data": "0000000000ea30550080349703ea305500400600"
+    }
+  ]
+}
