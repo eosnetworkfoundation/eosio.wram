@@ -271,6 +271,20 @@ describe(wram_contract, () => {
         expect(after - before).toBe(0)
     })
 
+    test('unwrap', async () => {
+        const before = {
+            bytes: getRamBytes(alice),
+            RAM: getTokenBalance(alice, RAM_SYMBOL),
+        }
+        await contracts.wram.actions.unwrap([alice, 1000]).send(alice)
+        const after = {
+            bytes: getRamBytes(alice),
+            RAM: getTokenBalance(alice, RAM_SYMBOL),
+        }
+        expect(after.bytes - before.bytes).toBe(1000)
+        expect(after.RAM - before.RAM).toBe(-1000)
+    })
+
     test('egresslist - addegress', async () => {
         await contracts.wram.actions.addegress([egress_list]).send(wram_contract)
         for ( const to of egress_list) {

@@ -5,6 +5,12 @@
 
 namespace eosio {
 
+[[eosio::action]]
+void wram::unwrap( const name owner, const int64_t bytes )
+{
+   transfer(owner, get_self(), asset{bytes, RAM_SYMBOL}, "unwrap ram");
+}
+
 void wram::unwrap_ram( const name to, const asset quantity )
 {
    // update WRAM supply to reflect system RAM

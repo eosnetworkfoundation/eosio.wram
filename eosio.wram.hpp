@@ -46,6 +46,9 @@ namespace eosio {
          [[eosio::action]]
          void removeegress( const set<name> accounts );
 
+         [[eosio::action]]
+         void unwrap( const name owner, const int64_t bytes );
+
          /**
           * Send system RAM `bytes` to contract to issue `RAM` tokens to sender.
           */
