@@ -1,0 +1,13 @@
+{
+    "actions": [{
+        "account": "eosio.wram",
+        "name": "create",
+        "authorization": [{
+            "actor": "eosio.wram",
+            "permission": "active"
+          }
+        ],
+        "data": "30a98b512f85cc650000000010000000005752414d000000"
+      }
+    ]
+  }
