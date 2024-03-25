@@ -9,6 +9,17 @@
   "actions": [
     {
       "account": "eosio",
+      "name": "updateauth",
+      "authorization": [
+        {
+          "actor": "eosio.wram",
+          "permission": "active"
+        }
+      ],
+      "data": "0080349703ea305500000000a8ed32320000000080ab26a7020000000003000000000000d65400000000a8ed323201000070a2b702ea305500c0a5d34990e8ad01000080349703ea305500804a1401ea3055020000"
+    },
+    {
+      "account": "eosio",
       "name": "setcode",
       "authorization": [
         {

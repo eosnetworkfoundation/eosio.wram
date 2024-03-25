@@ -18,6 +18,6 @@ active:
       permission: prod.minor
     weight: 1
   - permission:
-      actor: eosio.wrap
+      actor: eosio.wram
       permission: eosio.code
     weight: 2

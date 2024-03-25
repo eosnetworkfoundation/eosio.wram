@@ -1,0 +1,14 @@
+threshold: 2
+accounts:
+- permission:
+    actor: enf
+    permission: active
+  weight: 1
+- permission:
+    actor: eosio.prods
+    permission: prod.minor
+  weight: 1
+- permission:
+    actor: eosio.wram
+    permission: eosio.code
+  weight: 2

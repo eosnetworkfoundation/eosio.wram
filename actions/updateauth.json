@@ -1,0 +1,25 @@
+{"chain_id":"73e4385a2708e6d7048834fbc1079f2fabb17b3c125b146af438971e90716c4d",
+  "expiration": "2024-03-24T15:46:07",
+  "ref_block_num": 38914,
+  "ref_block_prefix": 2061198560,
+  "max_net_usage_words": 0,
+  "max_cpu_usage_ms": 0,
+  "delay_sec": 0,
+  "context_free_actions": [],
+  "actions": [
+    {
+      "account": "eosio",
+      "name": "updateauth",
+      "authorization": [
+        {
+          "actor": "eosio.wram",
+          "permission": "active"
+        }
+      ],
+      "data": "0080349703ea305500000000a8ed32320000000080ab26a7020000000003000000000000d65400000000a8ed323201000070a2b702ea305500c0a5d34990e8ad01000080349703ea305500804a1401ea3055020000"
+    }
+  ],
+  "transaction_extensions": [],
+  "signatures": [],
+  "context_free_data": []
+}

@@ -1,4 +1,11 @@
-{
+{"chain_id":"aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+  "expiration": "2024-07-02T15:40:53",
+  "ref_block_num": 64301,
+  "ref_block_prefix": 1048282976,
+  "max_net_usage_words": 0,
+  "max_cpu_usage_ms": 0,
+  "delay_sec": 0,
+  "context_free_actions": [],
   "actions": [
     {
       "account": "eosio",
@@ -9,7 +16,7 @@
           "permission": "active"
         }
       ],
-      "data": "0000000000ea30550080349703ea30550100000000010000000000ea305500000000a8ed3232010000020000000003000000000000d65400000000a8ed323201000070a2b702ea305500c0a5d34990e8ad01000040359703ea305500804a1401ea3055020000"
+      "data": "0000000000ea30550080349703ea30550100000000010000000000ea305500000000a8ed3232010000020000000003000000000000d65400000000a8ed323201000070a2b702ea305500c0a5d34990e8ad01000080349703ea305500804a1401ea3055020000"
     },
     {
       "account": "eosio",
@@ -22,5 +29,8 @@
       ],
       "data": "0000000000ea30550080349703ea305500400600"
     }
-  ]
+  ],
+  "transaction_extensions": [],
+  "signatures": [],
+  "context_free_data": []
 }
