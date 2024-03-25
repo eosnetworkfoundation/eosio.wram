@@ -1,13 +1,16 @@
 {
-  "actions": [{
-      "account": "eosio.wram",
-      "name": "addegress",
-      "authorization": [{
-          "actor": "eosio.wram",
-          "permission": "active"
-        }
-      ],
-      "data": "01000090e602ea3055"
+  "account": "eosio.wram",
+  "name": "addegress",
+  "authorization": [{
+      "actor": "eosio.wram",
+      "permission": "active"
     }
-  ]
+  ],
+  "json_data": {
+    "accounts": [
+      "eosio.ram",
+      "eosio.wrap"
+    ]
+  },
+  "data": "02000090e602ea30550040359703ea3055"
 }

@@ -48,7 +48,11 @@
           "permission": "active"
         }
       ],
-      "data": "30a98b512f85cc650000000010000000005752414d000000"
+      "json_data": {
+        "issuer": "eosio.wram",
+        "maximum_supply": "68719476736 WRAM"
+      },
+      "data": "0080349703ea30550000000010000000005752414d000000"
     },
     {
       "account": "eosio.wram",
@@ -58,7 +62,13 @@
           "permission": "active"
         }
       ],
-      "data": "01000090e602ea3055"
+      "json_data": {
+        "accounts": [
+          "eosio.ram",
+          "eosio.wrap"
+        ]
+      },
+      "data": "02000090e602ea30550040359703ea3055"
     }
   ],
   "transaction_extensions": [],
