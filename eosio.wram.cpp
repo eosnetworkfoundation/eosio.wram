@@ -18,9 +18,6 @@ void wram::unwrap_ram( const name to, const asset quantity )
 
    // validate incoming token transfer
    check(quantity.symbol == RAM_SYMBOL, "Only the system " + RAM_SYMBOL.code().to_string() + " token is accepted for transfers.");
-   check(quantity.amount > 0, "quantity must be positive" ); // shouldn't be possible
-   check(is_account(to), "to account does not exist" ); // shouldn't be possible
-   check(to != get_self(), "cannot transfer to self" ); // shouldn't be possible
 
    // ramtransfer to user
    eosiosystem::system_contract::ramtransfer_action ramtransfer_act{"eosio"_n, {get_self(), "active"_n}};
@@ -32,10 +29,8 @@ void wram::wrap_ram( const name to, const int64_t bytes )
    // update WRAM supply to reflect system RAM
    mirror_system_ram();
 
-   // validate incoming RAM transfer
-   check(bytes > 0, "bytes must be positive" ); // shouldn't be possible
-   check(is_account(to), "to account does not exist" ); // shouldn't be possible
-   check(to != get_self(), "cannot transfer to self" ); // shouldn't be possible
+   // cannot have contract itself mint WRAM
+   check(to != get_self(), "cannot wrap ram to self" );
 
    // transfer RAM tokens to user
    const asset quantity{bytes, RAM_SYMBOL};
