@@ -332,4 +332,24 @@ describe(wram_contract, () => {
         const after = getTokenBalance(alice, RAM_SYMBOL)
         expect(after - before).toBe(0)
     })
+
+    test('ramtransfer::error - bytes must be positive', async () => {
+        const action = contracts.system.actions.ramtransfer([alice, wram_contract, 0, '']).send(wram_contract)
+        await expectToThrow(action, 'eosio_assert: must transfer positive quantity')
+    })
+
+    test('ramtransfer::error - cannot wrap ram to self', async () => {
+        const action = contracts.system.actions.buyrambytes([wram_contract, wram_contract, 100]).send(wram_contract)
+        await expectToThrow(action, 'eosio_assert: cannot wrap ram to self')
+    })
+
+    test('transfer::error - must transfer positive quantity', async () => {
+        const action = contracts.wram.actions.transfer([alice, wram_contract, `0 ${RAM_SYMBOL}`, '']).send(alice)
+        await expectToThrow(action, 'eosio_assert: must transfer positive quantity')
+    })
+
+    test('transfer::error - cannot transfer to self', async () => {
+        const action = contracts.wram.actions.transfer([wram_contract, wram_contract, `0 ${RAM_SYMBOL}`, '']).send(wram_contract)
+        await expectToThrow(action, 'eosio_assert: cannot transfer to self')
+    })
 })
