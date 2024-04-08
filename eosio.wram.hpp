@@ -40,12 +40,28 @@ namespace eosio {
          };
          typedef eosio::multi_index< "egresslist"_n, egresslist_row > egresslist;
 
+         /**
+          * Add accounts to the egress list.
+          *
+          * @param accounts - set of accounts to add to the egress list
+          */
          [[eosio::action]]
          void addegress( const set<name> accounts );
 
+         /**
+          * Remove accounts from the egress list.
+          *
+          * @param accounts - set of accounts to remove from the egress list
+          */
          [[eosio::action]]
          void removeegress( const set<name> accounts );
 
+         /**
+          * Unwrap WRAM tokens to system RAM `bytes`
+          *
+          * @param owner - the account to unwrap WRAM tokens from,
+          * @param bytes - the amount of system RAM to unwrap.
+          */
          [[eosio::action]]
          void unwrap( const name owner, const int64_t bytes );
 
