@@ -1,5 +1,5 @@
 import {Asset, Int64, Name} from '@wharfkit/antelope'
-import {Blockchain, expectToThrow} from '@proton/vert'
+import {Blockchain, expectToThrow} from '@eosnetwork/vert'
 import {describe, expect, test} from 'bun:test'
 
 // Vert EOS VM
