@@ -13,6 +13,12 @@ The `eosio.wram` contract is a pivotal development in the EOS ecosystem, designe
 - **Token Name**: EOS Wrapped RAM
 - **Max Supply**: `418945440768` (418 GB)
 
+## Security Audits
+
+| Date | Security Auditor | URL |
+| -----| --------------|------|
+| April 4, 2024 | [BlockSec](https://blocksec.com/) | [blocksec_eos_wram_v1.0-signed.pdf](https://github.com/blocksecteam/audit-reports/blob/main/c%2B%2B/blocksec_eos_wram_v1.0-signed.pdf)
+
 ## Key Functionalities
 
 ### Wrapping and Unwrapping RAM
