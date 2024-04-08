@@ -1,13 +1,14 @@
 {
-    "actions": [{
-        "account": "eosio.wram",
-        "name": "create",
-        "authorization": [{
-            "actor": "eosio.wram",
-            "permission": "active"
-          }
-        ],
-        "data": "0080349703ea3055001c188b61000000005752414d000000"
-      }
-    ]
-  }
+  "account": "eosio.wram",
+  "name": "create",
+  "authorization": [{
+      "actor": "eosio.wram",
+      "permission": "active"
+    }
+  ],
+  "json_data": {
+    "issuer": "eosio.wram",
+    "maximum_supply": "418945440768 WRAM"
+  },
+  "data": "0080349703ea3055001c188b61000000005752414d000000"
+}
