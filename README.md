@@ -17,7 +17,7 @@ The `eosio.wram` contract is a pivotal development in the EOS ecosystem, designe
 
 | Date | Security Auditor | URL |
 | -----| --------------|------|
-| April 9, 2024 | [BlockSec](https://blocksec.com/) | [blocksec_eos_wram_v1.0-signed.pdf](https://github.com/blocksecteam/audit-reports/blob/main/c%2B%2B/blocksec_eos_wram_v1.1-signed.pdf)
+| April 9, 2024 | [BlockSec](https://blocksec.com/) | [blocksec_eos_wram_v1.1-signed.pdf](https://github.com/blocksecteam/audit-reports/blob/main/c%2B%2B/blocksec_eos_wram_v1.1-signed.pdf)
 
 ## Key Functionalities
 
