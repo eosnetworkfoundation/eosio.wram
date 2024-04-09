@@ -354,7 +354,10 @@ describe(wram_contract, () => {
     })
 
     test('issue::error - must be executed by contract', async () => {
-        const action = contracts.wram.actions.issue([wram_contract, `10000 ${RAM_SYMBOL}`, '']).send(wram_contract)
-        await expectToThrow(action, 'eosio_assert: must be executed by contract')
+        const action_issue = contracts.wram.actions.issue([wram_contract, `10000 ${RAM_SYMBOL}`, '']).send(wram_contract)
+        await expectToThrow(action_issue, 'eosio_assert: must be executed by contract')
+
+        const action_retire = contracts.wram.actions.retire([`10000 ${RAM_SYMBOL}`, '']).send(wram_contract)
+        await expectToThrow(action_retire, 'eosio_assert: must be executed by contract')
     })
 })
