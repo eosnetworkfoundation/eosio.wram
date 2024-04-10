@@ -43,6 +43,13 @@ The `eosio.wram` contract is deployed under the `eosio.wram` account with `eosio
 
 ## Development and Testing
 
+### [Install CDT](https://github.com/AntelopeIO/cdt)
+
+```bash
+$ wget https://github.com/AntelopeIO/cdt/releases/download/v4.0.1/cdt_4.0.1_amd64.deb
+$ sudo apt install ./cdt_4.0.1_amd64.deb
+```
+
 ### Build Instructions
 
 To compile the contract, developers can use the following command:
