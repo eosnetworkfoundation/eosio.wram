@@ -41,6 +41,7 @@ void wram::issue( const name& to, const asset& quantity, const string& memo )
     check( to == st.issuer, "tokens can only be issued to issuer account" );
 
     require_auth( st.issuer );
+    check( get_sender() == get_self(), "must be executed by contract");
     check( quantity.is_valid(), "invalid quantity" );
     check( quantity.amount > 0, "must issue positive quantity" );
 
@@ -66,6 +67,7 @@ void wram::retire( const asset& quantity, const string& memo )
     const auto& st = *existing;
 
     require_auth( st.issuer );
+    check( get_sender() == get_self(), "must be executed by contract");
     check( quantity.is_valid(), "invalid quantity" );
     check( quantity.amount > 0, "must retire positive quantity" );
 
