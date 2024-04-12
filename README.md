@@ -11,7 +11,7 @@ The `eosio.wram` contract is a pivotal development in the EOS ecosystem, designe
 - **Token Symbol**: `WRAM`
 - **Precision**: 0
 - **Token Name**: EOS Wrapped RAM
-- **Max Supply**: `418945440768` (418 GB)
+- **Max Supply**: `418945440768` bytes (390 GB)
 
 ## Security Audits
 
